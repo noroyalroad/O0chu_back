@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mariate.mapper.MovieMapper">
+    <select id="getlist" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT * FROM movie_info
+    </select>
+    
+    
+    <update id="updatecnt" >
+        UPDATE  movie_info
+        SET movie_click = movie_click + 1
+        WHERE movie_name = #{movieName}
+    </update>
+
+    <select id="getdetail" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT  * FROM movie_info WHERE kr_title =#{movieName};
+    </select>
+
+
+    <insert id="addcomment" parameterType="com.example.mariate.domain.CommentDTO">
+        INSERT INTO COMMENTS ( nickname,LIKES,UPDATE_TIME ,COMMENTS, movie_id) VALUES (#{nickname},#{likes},now(),#{comments}, #{movie_id});
+    </insert>
+
+    <select id="getcomment" parameterType="com.example.mariate.domain.CommentDTO" resultType="com.example.mariate.domain.CommentDTO">
+        SELECT  *  FROM  COMMENTS  WHERE movie_id = #{movie_id};
+    </select>
+
+
+    <update id="likes">
+        UPDATE  COMMENTS
+        SET likes = LIKES + 1
+        WHERE COMMENT_ID  = #{commentId};
+    </update>
+
+    <select id="getlist2" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT * FROM GIMOTTI2;
+    </select>
+
+    <select id="title" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM GIMOTTI2 , SUGGESTION
+        WHERE GIMOTTI2.MOVIE_ID= SUGGESTION.MOVIE_ID;
+    </select>
+
+
+    <insert id="inRating" parameterType="com.example.mariate.domain.RaingDTO">
+        INSERT INTO score (user_email, movie_id, score) values (#{user_email}, #{movie_id}, #{score})
+    </insert>
+
+    <select id="samere" parameterType="com.example.mariate.domain.RaingDTO" resultType="com.example.mariate.domain.RaingDTO">
+        SELECT  * FROM  score WHERE MOVIE_ID = #{movie_id} AND USER_EMAIL =#{user_email} ;
+    </select>
+
+    <update id="ratingup">
+        UPDATE  score
+        SET score = #{score}
+        WHERE user_email  = #{user_email}  and  movie_id = #{movie_id};
+    </update>
+
+    <select id="genres" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        select * from movie_info  where genres like CONCAT('%',#{genres},'%');
+    </select>
+
+    <select id="gonpogenres" parameterType="list" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM movie_info
+        WHERE
+        <foreach collection="list" item="genre" separator=" OR " open="(" close=")">
+            genres LIKE CONCAT('%', #{genre}, '%')
+        </foreach>
+    </select>
+
+
+    <select id="Newmovie" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM movie_info g
+        WHERE
+        <![CDATA[
+		 release_date < CURDATE()
+ 	    ]]>
+        ORDER BY release_date DESC LIMIT 10;
+    </select>
+
+
+    <select id="guitar" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM movie_info
+        WHERE
+            NOT (
+                        GENRES LIKE '%액션%' OR
+                        GENRES LIKE '%애니메이션%' OR
+                        GENRES LIKE '%공포%' OR
+                        GENRES LIKE '%스릴러%' OR
+                        GENRES LIKE '%범죄%' OR
+                        GENRES LIKE '%코미디%' OR
+                        GENRES LIKE '%로맨스%' OR
+                        GENRES LIKE '%멜로%' OR
+                        GENRES LIKE '%드라마%'
+                );
+    </select>
+
+    <select id="moviesearch" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT  * FROM  movie_info  WHERE KR_TITLE  LIKE CONCAT('%',#{korean_title},'%') OR US_TITLE LIKE CONCAT('%',#{orginal_title},'%')
+    </select>
+
+    <select id="suggestion" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT M.*
+        FROM SUGGESTION S, MOVIE_INFO M
+        WHERE S.MOVIE_ID= M.MOVIE_ID;
+    </select>
+
+    <select id="moviedetail" parameterType="Long" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT * FROM movie_info  WHERE movie_id = #{movieId}
+    </select>
+
+    <select id="newsuggestion" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM movie_info mi
+        WHERE MOVIE_ID IN (SELECT movie_id FROM suggestion s WHERE user_email LIKE CONCAT('%', #{user_email},'%'))
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--    <select id="guestlist" parameterType="long" resultType="com.example.oraclete.domain.GuestDTO">-->
+<!--        SELECT * FROM guestbook where no= #{no}-->
+<!--    </select>-->
+
+
+</mapper>
