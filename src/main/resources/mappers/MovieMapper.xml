@@ -46,7 +46,7 @@
 
 
     <insert id="inRating" parameterType="com.example.mariate.domain.RaingDTO">
-        INSERT INTO score (user_email, movie_id, score) values (#{user_email}, #{movie_id}, #{score})
+        INSERT INTO score (user_email, movie_id, score, times) values (#{user_email}, #{movie_id}, #{score}, now())
     </insert>
 
     <select id="samere" parameterType="com.example.mariate.domain.RaingDTO" resultType="com.example.mariate.domain.RaingDTO">
@@ -55,7 +55,7 @@
 
     <update id="ratingup">
         UPDATE  score
-        SET score = #{score}
+        SET score = #{score}, times = now()
         WHERE user_email  = #{user_email}  and  movie_id = #{movie_id};
     </update>
 
@@ -120,6 +120,29 @@
         FROM movie_info mi
         WHERE MOVIE_ID IN (SELECT movie_id FROM suggestion s WHERE user_email LIKE CONCAT('%', #{user_email},'%'))
     </select>
+
+
+    <select id="userRating">
+        select score from score s where MOVIE_ID = #{movie_id} and USER_EMAIL like  #{user_email};
+    </select>
+
+    <select id="withmovie" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT mi.*, COUNT(DISTINCT extracted_genres.genre) AS matching_genres_count
+        FROM movie_info mi
+        JOIN (
+        SELECT TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(mi2.genres, ',', numbers.n), ',', -1)) AS genre
+        FROM (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) numbers INNER JOIN movie_info mi2
+        ON CHAR_LENGTH(mi2.genres)
+        -CHAR_LENGTH(REPLACE(mi2.genres, ',', '')) >= numbers.n-1
+        WHERE mi2.MOVIE_ID = #{movie_id}
+        ) AS extracted_genres
+        ON FIND_IN_SET(TRIM(extracted_genres.genre), mi.genres) > 0
+        WHERE mi.MOVIE_ID != #{movie_id} AND YEAR(mi.RELEASE_DATE) = YEAR((SELECT RELEASE_DATE FROM movie_info WHERE MOVIE_ID = #{movie_id}))
+        GROUP BY mi.MOVIE_ID
+        ORDER BY matching_genres_count DESC, mi.RELEASE_DATE DESC
+        LIMIT 10;
+    </select>
+
 
 
 

@@ -218,5 +218,28 @@ public class TestController {
 
     }
 
+    @PostMapping("/user/Rating")
+    public int userRating(@RequestBody String requestBody) {
+        System.out.println(requestBody);
+
+
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(requestBody);
+            String user_email = rootNode.get("user_email").asText();
+            String movie_id = rootNode.get("movie_id").asText();
+
+
+
+            int ks = movieservice.userRating(user_email,movie_id);
+            return ks;
+        } catch (IOException e) {
+            return -1;
+        }
+
+
+    }
+
 
 }

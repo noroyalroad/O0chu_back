@@ -55,6 +55,14 @@ public class ListController {
 
         return list;
     }
+    @GetMapping("/movie/withmovie/{movie_id}")
+    public List<MoiveDTO> withmovie(@PathVariable Long movie_id){
+        List<MoiveDTO> list = movieservice.withmovie(movie_id);
+        return list ;
+    }
+
+
+
 
 
 

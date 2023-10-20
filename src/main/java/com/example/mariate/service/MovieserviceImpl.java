@@ -169,4 +169,21 @@ public class MovieserviceImpl implements Movieservice {
     }
 
 
+
+    @Override
+    public int userRating(String user_email, String movie_id) {
+
+        int re = movieMapper.userRating(user_email, movie_id);
+        return  re;
+
+    }
+
+    @Override
+    public List<MoiveDTO> withmovie(Long movie_id) {
+
+        List<MoiveDTO> list = movieMapper.withmovie(movie_id);
+        return list;
+    }
+
+
 }

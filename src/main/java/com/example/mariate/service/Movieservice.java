@@ -45,5 +45,9 @@ public interface Movieservice {
 
    public List<MoiveDTO> newsuggestion(String user_email);
 
+   public  int userRating(String user_email, String movie_id);
+
+   public List<MoiveDTO> withmovie(Long movie_id);
+
 
 }
