@@ -35,7 +35,7 @@ public class AuthController {
         System.out.println(result.getData());
         return result;
 
-        }
+    }
 
     // POST 메서드를 사용하여 유효성 검사 처리하는 엔드포인트
     @PostMapping("/nextClick")

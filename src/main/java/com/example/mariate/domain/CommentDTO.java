@@ -8,7 +8,7 @@ public class CommentDTO {
     private int comment_id;
     private String nickname;
     private int Likes;
-    private LocalDateTime update_time;
+    private String update_time;
     private char comment_delete_yn;
     private LocalDateTime comment_delete_time;
     private String comments;

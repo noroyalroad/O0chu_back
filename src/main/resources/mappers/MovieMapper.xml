@@ -15,7 +15,7 @@
     </update>
 
     <select id="getdetail" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
-        SELECT  * FROM movie_info WHERE kr_title =#{movieName};
+        SELECT  *,DATE_FORMAT(RELEASE_DATE,'%Y-%m-%d') FROM movie_info WHERE kr_title =#{movieName};
     </select>
 
 
@@ -24,7 +24,7 @@
     </insert>
 
     <select id="getcomment" parameterType="com.example.mariate.domain.CommentDTO" resultType="com.example.mariate.domain.CommentDTO">
-        SELECT  *  FROM  COMMENTS  WHERE movie_id = #{movie_id};
+        SELECT  *  FROM  COMMENTS  WHERE movie_id = #{movie_id} ORDER BY update_time DESC  ;
     </select>
 
 
@@ -142,6 +142,24 @@
         ORDER BY matching_genres_count DESC, mi.RELEASE_DATE DESC
         LIMIT 10;
     </select>
+
+    <select id="paging" resultType="com.example.mariate.domain.CommentDTO">
+        SELECT *
+        FROM (
+                 SELECT *, ROW_NUMBER() OVER (ORDER BY UPDATE_time desc) AS ROWNUM
+                 FROM COMMENTS
+                 WHERE MOVIE_ID = #{movie_id}
+             ) RankedComments
+        WHERE RankedComments.ROWNUM BETWEEN #{start} AND #{end};
+    </select>
+
+
+    <select id="TotalCount">
+        SELECT count(*)  FROM  COMMENTS  WHERE movie_id = #{movie_id}   ;
+    </select>
+
+
+
 
 
 

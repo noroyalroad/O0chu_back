@@ -4,10 +4,16 @@ import com.example.mariate.dto.PatchUsersDto;
 import com.example.mariate.dto.ResponseDto;
 import com.example.mariate.dto.PatchUsersResponseDto;
 import com.example.mariate.service.UsersService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -28,6 +34,32 @@ public class UsersController {
         return response;
     }
 
+    @PostMapping("/mypage/deleteuser")
+    public ResponseDto<PatchUsersResponseDto> deleteUser(@RequestBody String userInfo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        ObjectMapper om = new ObjectMapper();
+        ResponseDto<PatchUsersResponseDto> response = null;
+
+        try{
+            map = om.readValue(userInfo, Map.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) auth.getPrincipal();
+
+        if(email.equals((String)map.get("email"))) {
+
+            response = usersService.deleteUser(email, (String)map.get("password"));
+        }else{
+            response = ResponseDto.setFailed("Does Not Match User");
+        }
+        System.out.println(response.toString());
+        return response;
+
+    }
+
     @PutMapping("/mypage/nickname")
     public ResponseDto<PatchUsersResponseDto> updateNickname(@RequestBody PatchUsersDto requestBody) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -45,11 +77,12 @@ public class UsersController {
 
     @PutMapping("/mypage/password")
     public ResponseDto<PatchUsersResponseDto> updatePassword(@RequestBody PatchUsersDto requestBody) {
+        System.out.println(requestBody.toString());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) auth.getPrincipal();
 
         // 서버에서 oldPassword 검증
-        boolean isOldPasswordValid = usersService.isOldPasswordValid(email, requestBody.getOldPassword());
+        boolean isOldPasswordValid = usersService.isOldPasswordValid(email, requestBody.getPassword());
 
         if (isOldPasswordValid) {
             ResponseDto<PatchUsersResponseDto> response = usersService.updatePassword(requestBody, email);
@@ -71,3 +104,4 @@ public class UsersController {
         return response;
     }
 }
+

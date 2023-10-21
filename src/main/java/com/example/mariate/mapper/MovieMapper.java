@@ -52,6 +52,12 @@ public interface MovieMapper {
 
     public List<MoiveDTO> withmovie(Long moive_id) ;
 
+    public List<CommentDTO> paging(int start, int end, String movie_id) ;
+
+
+    public int TotalCount(String movie_id);
+
+
 
 
 

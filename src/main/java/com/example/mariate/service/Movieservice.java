@@ -49,5 +49,9 @@ public interface Movieservice {
 
    public List<MoiveDTO> withmovie(Long movie_id);
 
+   public List<CommentDTO> paging(int start, int end, String movie_id);
+
+   public int Totalcount(String movie_id);
+
 
 }

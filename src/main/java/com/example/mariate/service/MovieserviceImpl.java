@@ -185,5 +185,23 @@ public class MovieserviceImpl implements Movieservice {
         return list;
     }
 
+    @Override
+    public List<CommentDTO> paging(int start, int end, String movie_id) {
+
+
+        List<CommentDTO> list = movieMapper.paging(start, end, movie_id) ;
+
+
+        return list;
+    }
+
+    @Override
+    public int Totalcount(String movie_id) {
+
+
+        int count = movieMapper.TotalCount(movie_id);
+        return count;
+    }
+
 
 }

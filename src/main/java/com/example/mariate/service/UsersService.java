@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class UsersService {
 
@@ -38,6 +39,25 @@ public class UsersService {
         PatchUsersResponseDto patchUsersResponseDto = new PatchUsersResponseDto(usersEntity);
 
         return ResponseDto.setSuccess("Success", patchUsersResponseDto);
+    }
+
+    public ResponseDto<PatchUsersResponseDto> deleteUser(String email, String password) {
+        UsersEntity usersEntity = usersRepository.findByEmail(email);
+        if (usersEntity == null) {
+            return ResponseDto.setFailed("Does Not Exist User");
+        }
+
+        if (!passwordEncoder.matches(password, usersEntity.getPassword())) {
+            return ResponseDto.setFailed("Current Password Does Not Match");
+        }
+
+        try {
+            usersRepository.delete(usersEntity);
+            return ResponseDto.setSuccess("회원 탈퇴 성공", null);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류");
+        }
     }
 
     public ResponseDto<PatchUsersResponseDto> updateNickname(PatchUsersDto dto, String email) {
@@ -82,6 +102,12 @@ public class UsersService {
             usersEntity = usersRepository.findByEmail(email);
             if (usersEntity == null) {
                 return ResponseDto.setFailed("Does Not Exist User");
+            }
+
+            // 기존 비밀번호의 유효성 확인
+            if (!isOldPasswordValid(email, dto.getOldPassword())) {
+                // 기존 비밀번호가 유효하지 않을 경우 에러 응답 반환
+                return ResponseDto.setFailed("Current Password Does Not Match");
             }
 
             // 패턴 검사
@@ -143,4 +169,5 @@ public class UsersService {
         // BCryptPasswordEncoder를 사용하여 기존 비밀번호를 검증
         return passwordEncoder.matches(oldPassword, usersEntity.getPassword());
     }
+
 }
