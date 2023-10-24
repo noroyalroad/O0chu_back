@@ -10,8 +10,8 @@
     
     <update id="updatecnt" >
         UPDATE  movie_info
-        SET movie_click = movie_click + 1
-        WHERE movie_name = #{movieName}
+        SET clicks = clicks + 1
+        WHERE movie_id = #{movie_id}
     </update>
 
     <select id="getdetail" parameterType="com.example.mariate.domain.MoiveDTO" resultType="com.example.mariate.domain.MoiveDTO">
@@ -157,6 +157,48 @@
     <select id="TotalCount">
         SELECT count(*)  FROM  COMMENTS  WHERE movie_id = #{movie_id}   ;
     </select>
+
+
+    <select id="genresPaging" resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM (
+                 SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc) AS ROWNUM
+                 FROM MOVIE_INFO
+                 WHERE genres LIKE  concat ('%', #{genres}, '%')
+             ) RankedComments
+        WHERE RankedComments.ROWNUM BETWEEN #{start} AND #{end};
+    </select>
+
+    <select id="twogenresPaging"  resultType="com.example.mariate.domain.MoiveDTO">
+        SELECT *
+        FROM (
+        SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc) AS ROWNUM
+        FROM MOVIE_INFO
+        WHERE
+        <foreach collection="genres" item="genre" separator=" OR " open="(" close=")">
+            genres LIKE CONCAT('%', #{genre}, '%')
+        </foreach>
+        ) RankedComments
+        WHERE RankedComments.ROWNUM BETWEEN #{start} AND #{end};
+
+
+    </select>
+
+
+    <select id="generespagingcout">
+        SELECT COUNT(*) FROM MOVIE_INFO WHERE GENRES LIKE  concat ('%', #{genres},'%')
+    </select>
+
+
+    <select id="twogenerespagingcout" parameterType="list">
+        SELECT COUNT(*)
+        FROM MOVIE_INFO
+        WHERE
+        <foreach collection="list" item="genre" separator=" OR " open="(" close=")">
+            genres LIKE CONCAT('%', #{genre}, '%')
+        </foreach>
+    </select>
+
 
 
 

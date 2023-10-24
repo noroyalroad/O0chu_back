@@ -44,7 +44,7 @@ public class TestController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(requestBody);
-            String movieName = rootNode.get("movieName").asText();
+            String movieName = rootNode.get("movie_id").asText();
 
 
             int ks = movieservice.update(movieName);

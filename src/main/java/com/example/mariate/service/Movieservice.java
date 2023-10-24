@@ -53,5 +53,11 @@ public interface Movieservice {
 
    public int Totalcount(String movie_id);
 
+   public  List<MoiveDTO> genrespaging(int start, int end, String genres);
+   public  List<MoiveDTO> twogenrespaging(int start, int end, List<String> genres);
+   public  int genrespagingcount(String genres);
+   public  int twogenrespagingcount(List<String> genres);
+
+
 
 }

@@ -203,5 +203,35 @@ public class MovieserviceImpl implements Movieservice {
         return count;
     }
 
+    @Override
+    public List<MoiveDTO> genrespaging(int start, int end, String genres) {
+
+        List<MoiveDTO> list = movieMapper.genresPaging(start,end, genres);
+
+        return  list;
+    }
+
+    @Override
+    public List<MoiveDTO> twogenrespaging(int start, int end, List<String> genres) {
+
+        List<MoiveDTO> list = movieMapper.twogenresPaging(start,end,genres);
+
+
+        return list;
+    }
+
+    @Override
+    public int genrespagingcount(String genres) {
+
+        int count = movieMapper.generespagingcout(genres) ;
+        return count;
+    }
+
+    @Override
+    public int twogenrespagingcount(List<String> genres) {
+        int count = movieMapper.twogenerespagingcout(genres);
+        return count;
+    }
+
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,7 @@ public class ListController {
 
 
     }
+
     @GetMapping("/comment/{movie_id}")
     public Map<String, Object> paging2(@RequestParam("pageNo") String pageNo, @PathVariable String movie_id) {
 
@@ -100,13 +102,56 @@ public class ListController {
 
         Map<String, Object> res = new HashMap<>();
 
-        res.put("comment", list) ;
+        res.put("comment", list);
         res.put("totalcout", total);
 
 
-
-
         return res;
+
+
+    }
+
+    @GetMapping("/movie/genres/{genres}")
+    Map<String, Object> gerenspage(@PathVariable String genres, @RequestParam("pageNo") String pageNo){
+
+
+        int end = Integer.parseInt(pageNo) * 20 ;
+        int start = end - 19 ;
+
+        System.out.println(genres);
+
+
+        Map<String, Object> res = new HashMap<>();
+
+
+        if (("공포 스릴러").equals(genres) || ("멜로 드라마").equals(genres)) {
+            String[] genreArray = genres.split(" ");
+            List<String> genreList = Arrays.asList(genreArray);
+            List<MoiveDTO> list1 = movieservice.twogenrespaging(start,end,genreList);
+            int count = movieservice.twogenrespagingcount(genreList) ;
+
+            res.put("count", count);
+            res.put("item", list1) ;
+
+            return  res ;
+
+        }
+
+        else {
+            List<MoiveDTO> list = movieservice.genrespaging(start,end,genres);
+            int count = movieservice.genrespagingcount(genres) ;
+
+            res.put("count", count);
+            res.put("item", list) ;
+
+            return  res ;
+
+
+        }
+
+
+
+
 
 
     }

@@ -14,7 +14,7 @@ public interface MovieMapper {
     public List<MoiveDTO> getlist2();
 
     public  List<MoiveDTO> title();
-    public int updatecnt (String movieName);
+    public int updatecnt (String movie_id);
 
     public List<MoiveDTO> getdetail (String movieName);
 
@@ -56,6 +56,12 @@ public interface MovieMapper {
 
 
     public int TotalCount(String movie_id);
+
+    public List<MoiveDTO> genresPaging(int start, int end, String genres);
+    public List<MoiveDTO> twogenresPaging(int start, int end, List<String> genres);
+
+    public int generespagingcout(String geners) ;
+    public int twogenerespagingcout(List<String> genres) ;
 
 
 
