@@ -64,6 +64,15 @@ public interface MovieMapper {
     public int twogenerespagingcout(List<String> genres) ;
 
 
+    public int insertwish(String movie_id, String user_email, char wish) ;
+
+    public  List<Character> wishstatus(String movie_id, String user_email) ;
+
+    public List<MoiveDTO> wishlist(String user_email) ;
+
+//    public List<String> wishcheck(String movie_id, String user_email);
+
+
 
 
 

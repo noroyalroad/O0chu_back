@@ -233,5 +233,30 @@ public class MovieserviceImpl implements Movieservice {
         return count;
     }
 
+    @Override
+    public int insertwish(String movie_id, String user_email, char wish) {
+
+
+        int result = movieMapper.insertwish(movie_id,user_email,wish) ;
+
+        System.out.println(result);
+        return result;
+    }
+
+    @Override
+    public List<Character> wishstatus(String movie_id, String user_eamil) {
+
+
+        return movieMapper.wishstatus(movie_id,user_eamil);
+    }
+
+    @Override
+    public List<MoiveDTO> wishlist(String user_email) {
+
+
+        return  movieMapper.wishlist(user_email) ;
+
+    }
+
 
 }

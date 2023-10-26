@@ -58,6 +58,14 @@ public interface Movieservice {
    public  int genrespagingcount(String genres);
    public  int twogenrespagingcount(List<String> genres);
 
+   public  int insertwish(String movie_id, String user_email, char wish);
+
+   public List<Character> wishstatus(String movie_id, String user_eamil) ;
+
+   public List<MoiveDTO> wishlist(String user_email);
+
+//   public int wishcheck(String movie_id, String user_email);
+
 
 
 }
