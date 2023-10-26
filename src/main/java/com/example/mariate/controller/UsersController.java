@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -82,14 +84,15 @@ public class UsersController {
         String email = (String) auth.getPrincipal();
 
         // 서버에서 oldPassword 검증
-        boolean isOldPasswordValid = usersService.isOldPasswordValid(email, requestBody.getPassword());
+        boolean isOldPasswordValid = usersService.isOldPasswordValid(email, requestBody.getOldPassword());
 
+        System.out.println(isOldPasswordValid);
         if (isOldPasswordValid) {
             ResponseDto<PatchUsersResponseDto> response = usersService.updatePassword(requestBody, email);
             return response;
         } else {
             // 기존 비밀번호가 유효하지 않을 경우 에러 응답 반환
-            return ResponseDto.setFailed("기존 비밀번호가 일치하지 않습니다.");
+            return ResponseDto.setFailed("Current Password Does Not Match");
         }
     }
 

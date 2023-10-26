@@ -16,7 +16,7 @@ public class UsersService {
 
     @Autowired
     private UsersRepository usersRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final String passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
     private final String nicknameRegex = "^[ㄱ-ㅎ|가-힣|a-zA-Z0-9].{1,8}$";
@@ -97,7 +97,6 @@ public class UsersService {
     public ResponseDto<PatchUsersResponseDto> updatePassword(PatchUsersDto dto, String email) {
         UsersEntity usersEntity = null;
         String newPassword = dto.getPassword();
-
         try {
             usersEntity = usersRepository.findByEmail(email);
             if (usersEntity == null) {
@@ -117,7 +116,7 @@ public class UsersService {
 
             // 비밀번호 변경을 위한 암호화
             String encodedNewPassword = passwordEncoder.encode(newPassword);
-
+            System.out.println(encodedNewPassword);
             usersEntity.setPassword(encodedNewPassword);
             usersRepository.save(usersEntity);
 

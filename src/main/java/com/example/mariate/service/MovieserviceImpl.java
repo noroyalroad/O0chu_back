@@ -258,5 +258,13 @@ public class MovieserviceImpl implements Movieservice {
 
     }
 
+    @Override
+    public List<Integer> totalRating(String movie_id) {
+
+        List<Integer> re = movieMapper.totalRating(movie_id);
+        return  re;
+
+    }
+
 
 }

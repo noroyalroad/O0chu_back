@@ -172,7 +172,7 @@
     <select id="genresPaging" resultType="com.example.mariate.domain.MoiveDTO">
         SELECT *
         FROM (
-                 SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc) AS ROWNUM
+                 SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc, release_date DESC) AS ROWNUM
                  FROM MOVIE_INFO
                  WHERE genres LIKE  concat ('%', #{genres}, '%')
              ) RankedComments
@@ -182,7 +182,7 @@
     <select id="twogenresPaging"  resultType="com.example.mariate.domain.MoiveDTO">
         SELECT *
         FROM (
-        SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc) AS ROWNUM
+        SELECT *, ROW_NUMBER() OVER (ORDER BY clicks desc,release_date DESC) AS ROWNUM
         FROM MOVIE_INFO
         WHERE
         <foreach collection="genres" item="genre" separator=" OR " open="(" close=")">
@@ -226,6 +226,10 @@
           AND W.WISH= 'Y'
           AND U.EMAIL= W.USER_EMAIL
           AND W.USER_EMAIL= #{user_email};
+    </select>
+
+    <select id="totalRating">
+        select score from score s where MOVIE_ID = #{movie_id};
     </select>
 
 <!--    <select id="wishcheck">-->

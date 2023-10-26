@@ -70,6 +70,8 @@ public interface MovieMapper {
 
     public List<MoiveDTO> wishlist(String user_email) ;
 
+    public List<Integer> totalRating (String  movie_id);
+
 //    public List<String> wishcheck(String movie_id, String user_email);
 
 

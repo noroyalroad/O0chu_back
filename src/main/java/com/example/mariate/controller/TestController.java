@@ -166,6 +166,21 @@ public class TestController {
 
     }
 
+    @PostMapping("/total/Rating")
+    public List<Integer> totalRating(@RequestBody String requestBody) {
+        System.out.println(requestBody);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(requestBody);
+//            String user_email = rootNode.get("user_email").asText();
+            String movie_id = rootNode.get("movie_id").asText();
+            List<Integer> ks = movieservice.totalRating(movie_id);
+            return ks;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     @PostMapping("/samre")
     public boolean same(@RequestBody RaingDTO rating) {
 

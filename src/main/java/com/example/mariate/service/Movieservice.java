@@ -63,6 +63,7 @@ public interface Movieservice {
    public List<Character> wishstatus(String movie_id, String user_eamil) ;
 
    public List<MoiveDTO> wishlist(String user_email);
+   public List<Integer> totalRating(String movie_id);
 
 //   public int wishcheck(String movie_id, String user_email);
 
